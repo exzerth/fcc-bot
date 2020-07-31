@@ -32,33 +32,77 @@ function a() {
 
 
 
+const managerId = document.getElementById("manager-id");
+const getManager = document.getElementById("get-manager");
 
 
-/* function a() {
-    fetch("https://fantasy.premierleague.com/api/entry/3413/history/")
+getManager.addEventListener("click", c)
+
+function c() {
+    fetch(`https://fantasy.premierleague.com/api/entry/${managerId.value}/`)
     .then(res => res.json())
     .then(data => {
-        //filter values of object returned into an array
-        let newData = Object.values(data)
-        //delete las two arrays
-        newData.splice(1, 2)
-        //console log values of the new array
-        console.log(newData[0])
+        //console.log(data)
 
-        let imp = []
-        //filter out required data and push to an array
-        newData[0].forEach(current => {
-            imp.push({
-                "tp": current.points,
-                "hit": current.event_transfers_cost
-            })
-        });
-        //perform hits subtraction from points
-        console.log(Number(imp[2].tp) - Number(imp[2].hit))
+        let dataArr = Object.values(data)
+        let myData = ({
+            "Id": dataArr[0],
+            "TeamName": dataArr[16],
+            "ManagerName": `${dataArr[4]} ${dataArr[5]}`
+        })
+
+        let managers = []
+        managers.push(myData.TeamName)
+        console.log(managers)
+
+        let items
+
+        if (localStorage.getItem('items')) {
+            items = JSON.parse(localStorage.getItem('items'))
+        } else {
+            items = []
+        }
+
+        localStorage.setItem('items', JSON.stringify(managers))
+        //const data = JSON.parse(localStorage.getItem('items'))
+
     })
 }
 
-a() */
+
+//c()
+
+/* var repeat, studentArr = [], markArr = [];
+while (repeat !== 'n' && repeat !== 'N'){
+    studentArr.push(prompt("Enter Student Name: "));
+    markArr.push(prompt("Enter Student Mark: "));
+    repeat = prompt ("Do you want to enter another student: y/n");
+}
+console.log('studentArr, markArr',studentArr, markArr); */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* function c() {
