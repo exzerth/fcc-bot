@@ -73,7 +73,8 @@ function c() {
 
 //c()
 
-/* var repeat, studentArr = [], markArr = [];
+/* extra
+var repeat, studentArr = [], markArr = [];
 while (repeat !== 'n' && repeat !== 'N'){
     studentArr.push(prompt("Enter Student Name: "));
     markArr.push(prompt("Enter Student Mark: "));
