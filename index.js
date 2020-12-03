@@ -23,8 +23,19 @@ function a() {
                 "hit": current.event_transfers_cost
             })
         });
+
+        console.log(imp);
+
+
         //perform hits subtraction from points
-        console.log(Number(imp[2].tp) - Number(imp[2].hit))
+        let lastArr = imp.length - 1;
+
+        if (Number(imp[lastArr].hit < 0)) {
+            console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
+        } else {
+            console.log("No hits")
+        }
+        
     })
 }
 
@@ -39,6 +50,8 @@ const getManager = document.getElementById("get-manager");
 getManager.addEventListener("click", c)
 
 function c() {
+    let managers = []
+
     fetch(`https://fantasy.premierleague.com/api/entry/${managerId.value}/`)
     .then(res => res.json())
     .then(data => {
@@ -51,20 +64,8 @@ function c() {
             "ManagerName": `${dataArr[4]} ${dataArr[5]}`
         })
 
-        let managers = []
         managers.push(myData.TeamName)
         console.log(managers)
-
-        let items
-
-        if (localStorage.getItem('items')) {
-            items = JSON.parse(localStorage.getItem('items'))
-        } else {
-            items = []
-        }
-
-        localStorage.setItem('items', JSON.stringify(managers))
-        //const data = JSON.parse(localStorage.getItem('items'))
 
     })
 }
