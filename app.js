@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -10,6 +11,13 @@ let port_number = app.listen(process.env.PORT || 3000);
 app.listen(port_number);
 }).catch(err => console.log(err));
 
+//load css and images
+app.use(express.static(__dirname + '/public'));
+
+//get routes
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname + '/index.html'));
+});
 
 //error handling middleware
 app.use((req, res, next) => {

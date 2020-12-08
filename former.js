@@ -1,5 +1,5 @@
-const playerId = document.getElementById("player-id");
-const getScore = document.getElementById("get-score");
+const playerId = document.querySelector("player-id");
+const getScore = document.querySelector("get-score");
 
 
 getScore.addEventListener("click", a)
@@ -73,14 +73,7 @@ function c() {
 
 //c()
 
-/* extra
-var repeat, studentArr = [], markArr = [];
-while (repeat !== 'n' && repeat !== 'N'){
-    studentArr.push(prompt("Enter Student Name: "));
-    markArr.push(prompt("Enter Student Mark: "));
-    repeat = prompt ("Do you want to enter another student: y/n");
-}
-console.log('studentArr, markArr',studentArr, markArr); */
+
 
 
 
