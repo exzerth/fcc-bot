@@ -1,0 +1,27 @@
+{
+  "name": "fcc-bot",
+  "version": "1.0.0",
+  "description": "a bot for fcc",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.5",
+    "nodemon": "^2.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RenegadeGandhi/fcc-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RenegadeGandhi/fcc-bot/issues"
+  },
+  "homepage": "https://github.com/RenegadeGandhi/fcc-bot#readme"
+}
