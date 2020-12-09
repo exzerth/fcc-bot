@@ -56,7 +56,9 @@ const dataPath = './api/data/managers.json';
         
         const playerId = req.body.playerid;
 
-        fetch(`https://fantasy.premierleague.com/api/entry/${playerId}/history/`)
+        const fplUrl = `https://fantasy.premierleague.com/api/entry/${playerId}/history/`;
+
+        fetch(fplUrl)
             .then(res => res.json())
             .then(data => {
 
