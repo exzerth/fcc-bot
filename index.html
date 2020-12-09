@@ -6,18 +6,23 @@
 </head>
 <body>
     
-    <div class="gw-score">
-        <input type="text" id="player-id"><br>
+    <form action="/register" method="POST">
+        
+        <div class="gw-score">
+            <label for="player-id">Player ID</label>
+            <input type="text" name="playerid" id="player-id"><br>
+        </div>
+
         <button id="get-score">Submit</button>
-    </div>
+    
+        <!-- <div class="manager">
+            <input type="text" id="manager-id"><br>
+            <button type="submit" id="get-manager">Join</button>
+        </div> -->
 
-    <div class="manager">
-        <input type="text" id="manager-id"><br>
-        <button type="submit" id="get-manager">Join</button>
-    </div>
+    </form>
 
 
 
-    <script src="former.js"></script>
 </body>
 </html>

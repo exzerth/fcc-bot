@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const playerRoutes = require('./api/routes/player');
 
 //connect mongodb
 mongoose.connect("mongodb+srv://fcc-bot:fBot152@fcc-bot-cluster.bkagm.mongodb.net/managers2020?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true })
@@ -11,6 +12,11 @@ let port_number = app.listen(process.env.PORT || 3000);
 app.listen(port_number);
 }).catch(err => console.log(err));
 
+
+//bodyparser middleware
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 //load css and images
 app.use(express.static(__dirname + '/public'));
 
@@ -18,6 +24,11 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/index.html'));
 });
+
+app.use('/', playerRoutes);
+
+
+
 
 //error handling middleware
 app.use((req, res, next) => {
