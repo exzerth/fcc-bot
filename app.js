@@ -1,16 +1,15 @@
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
+require('dotenv').config()
 const app = express();
 const playerRoutes = require('./api/routes/player');
 
 //connect mongodb
-mongoose.connect("mongodb+srv://fcc-bot:fBot152@fcc-bot-cluster.bkagm.mongodb.net/managers2020?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true })
 .then(_result => {
 console.log("Database connected");
-let port_number = app.listen(process.env.PORT || 3000);
-app.listen(port_number);
-}).catch(err => console.log(err));
+})
 
 
 //bodyparser middleware
@@ -59,3 +58,7 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+app.listen(process.env.PORT, () => {
+    console.log('server started')
+})

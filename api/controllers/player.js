@@ -1,6 +1,7 @@
-
+const express = require('express')
 const fs = require('fs');
-const fetch = require('node-fetch');
+const request = require('request')
+const User = require('../models/users')
 
 const dataPath = './api/data/managers.json';
 
@@ -26,50 +27,51 @@ const dataPath = './api/data/managers.json';
         });
     };
 
+
+    
+
     // READ
-    exports.getUser = (req, res) => {
-        fs.readFile(dataPath, 'utf8', (err, data) => {
-            if (err) {
-                throw err;
-            }
 
-            res.send(JSON.parse(data));
-        });
-    };
+    const PlayerController = {
 
+    getUser: function(req, res) {
+        //get all users
+        User.find({}, (err, data) => {
+            res.json(data)
+        })
+
+        // fs.readFile(dataPath, 'utf8', (err, data) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+
+        //     res.send(JSON.parse(data));
+        // });
+    },
+
+
+
+
+
+    
     // CREATE
-    exports.register = (req, res) => {
-
-        /* //### API TEST (json-placeholder works, looks like problem is with fpl api)
-
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(res => res.json())
-            .then(json => {
-                console.log("First user in the array:");
-                console.log(json[0]);
-                console.log("Name of the first user in the array:");
-                console.log(json[0].name);
-        }) 
-        
-        */
-
-        
+    registerUser: function(req, res) {
+   
         const playerId = req.body.playerid;
 
         const fplUrl = `https://fantasy.premierleague.com/api/entry/${playerId}/history/`;
 
-        fetch(fplUrl)
-            .then(res => res.json())
-            .then(data => {
+        request(fplUrl, (err, resp, body) => {
+                let data = JSON.parse(body)
 
                 //filter values of object returned into an array
                 let newData = Object.values(data)
                 //delete las two arrays
                 newData.splice(1, 2)
                 //console log values of the new array
-                console.log(newData[0])
+                // console.log(newData[0])
 
-                let imp = []
+                var imp = []
                 //filter out required data and push to an array
                 newData[0].forEach(current => {
                     imp.push({
@@ -77,9 +79,6 @@ const dataPath = './api/data/managers.json';
                         "hit": current.event_transfers_cost
                     })
                 });
-
-                console.log(imp);
-
 
                 //perform hits subtraction from points
                 let lastArr = imp.length - 1;
@@ -89,10 +88,29 @@ const dataPath = './api/data/managers.json';
                 } else {
                     console.log("No hits")
                 }
-                
-            }).catch( err => {
-                console.log(err);
-            })
+            
+                //Create new user and adding the details to the database
+                //check if user already exists using fpl id
+                User.findOne({fpl_id: playerId}, (err, data) => {
+                    if(data) {
+                        res.send('user already registered!')
+                    } else {
+                        //create new user and register it
+                        let newUser = new User({fpl_id: playerId,points: imp[imp.length - 1].tp, hit: imp[imp.length - 1].hit, total_point: imp[imp.length - 1].tp - imp[imp.length - 1].hit });
+                        newUser.save((err, result) => {
+                            console.log(result)
+                            res.send(result)
+                        }) 
+                    }
+                })
+    
+        })
+
+            
+
+
+
+
 
 
         /* readFile(data => {
@@ -106,11 +124,12 @@ const dataPath = './api/data/managers.json';
             });
         },
             true); */
-    };
+    
+}
+    }
 
    
-
-
+module.exports = PlayerController;
 
 
 

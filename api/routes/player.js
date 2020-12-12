@@ -5,6 +5,7 @@ const playerController = require('../controllers/player');
 
 
 /* router.get('/view', playerController.getUser) */
-router.post("/register", playerController.register)
+router.post("/register", playerController.registerUser)
+      .get('/users', playerController.getUser)
 
 module.exports = router;
