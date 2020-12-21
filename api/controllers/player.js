@@ -39,14 +39,6 @@ const dataPath = './api/data/managers.json';
         User.find({}, (err, data) => {
             res.json(data)
         })
-
-        // fs.readFile(dataPath, 'utf8', (err, data) => {
-        //     if (err) {
-        //         throw err;
-        //     }
-
-        //     res.send(JSON.parse(data));
-        // });
     },
 
 
@@ -57,14 +49,82 @@ const dataPath = './api/data/managers.json';
     // CREATE
     registerUser: function(req, res) {
    
-        const playerId = req.body.playerid;
+        let playerId = req.body.playerid;
 
-        const fplUrl = `https://fantasy.premierleague.com/api/entry/${playerId}/history/`;
+        const fplUrl = `https://fantasy.premierleague.com/api/leagues-classic/484467/standings/`;
 
         request(fplUrl, (err, resp, body) => {
                 let data = JSON.parse(body)
-
                 //filter values of object returned into an array
+                let newData = Object.values(data)
+                //console.log(newData)
+                //delete first two arrays
+                newData.splice(0, 2)
+                let d = (newData[0].results)
+                //cutout first 30
+                const needed = d.slice(0, 30)
+                //console.log(needed)
+
+                let userIdArr = []
+                for(let i = 0; i < needed.length; i++) {
+                    const c = needed[i]
+                    userIdArr = userIdArr.concat(c.entry)
+                }
+                //console.log(userIdArr)
+            
+                //Create new user and adding the details to the database
+                //check if user already exists using fpl id
+                User.findOne({fpl_id: playerId}, (err, data) => {
+                    if(data) {
+                        res.send('user already registered!')
+                    } else {
+
+                        /* for (let j = 0; j < userIdArr.length; j++) {
+                            if (Number(playerId) === userIdArr[j]) {
+                                console.log('true')
+                                break
+                            } else {
+                                console.log('false')
+                            }
+                        } */
+
+
+                        /* if(userIdArr.includes(playerId) === true){
+                            res.send({
+                                message: "yes",
+                                reason: playerId
+                            })
+                             //create new user and register it
+                            let newUser = new User({
+                                manager_name: needed.player_name,
+                                team_name: needed.entry_name,
+                                fpl_id: playerId,
+                            });
+                            newUser.save((err, result) => {
+                                console.log(result)
+                                res.send(result)
+                            }) 
+                            
+                        } else {
+                            return res.send('no')
+                        } */
+                         
+                    }
+                })
+    
+        })
+
+            
+    
+}
+    }
+
+   
+module.exports = PlayerController;
+
+
+
+/* //filter values of object returned into an array
                 let newData = Object.values(data)
                 //delete las two arrays
                 newData.splice(1, 2)
@@ -88,52 +148,6 @@ const dataPath = './api/data/managers.json';
                 } else {
                     console.log("No hits")
                 }
-            
-                //Create new user and adding the details to the database
-                //check if user already exists using fpl id
-                User.findOne({fpl_id: playerId}, (err, data) => {
-                    if(data) {
-                        res.send('user already registered!')
-                    } else {
-                        //create new user and register it
-                        let newUser = new User({fpl_id: playerId,points: imp[imp.length - 1].tp, hit: imp[imp.length - 1].hit, total_point: imp[imp.length - 1].tp - imp[imp.length - 1].hit });
-                        newUser.save((err, result) => {
-                            console.log(result)
-                            res.send(result)
-                        }) 
-                    }
-                })
-    
-        })
-
-            
-
-
-
-
-
-
-        /* readFile(data => {
-            const newUserId = Object.keys(data).length + 1;
-
-            // add the new user
-            data[newUserId.toString()] = req.body;
-
-            writeFile(JSON.stringify(data, null, 2), () => {
-                res.send("<h1>Successful, We'll be in touch with you</h1>")
-            });
-        },
-            true); */
-    
-}
-    }
-
-   
-module.exports = PlayerController;
-
-
-
-
 
 
 
