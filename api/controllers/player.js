@@ -79,23 +79,15 @@ const dataPath = './api/data/managers.json';
                         res.send('user already registered!')
                     } else {
 
-                        /* for (let j = 0; j < userIdArr.length; j++) {
-                            if (Number(playerId) === userIdArr[j]) {
-                                console.log('true')
-                                break
-                            } else {
-                                console.log('false')
-                            }
-                        } */
+                        console.log("playerid", playerId)
 
-
-                        /* if(userIdArr.includes(playerId) === true){
+                        if(userIdArr.includes(Number(playerId)) === true){
                             res.send({
-                                message: "yes",
+                                message: "Registration successful",
                                 reason: playerId
                             })
                              //create new user and register it
-                            let newUser = new User({
+                            /* let newUser = new User({
                                 manager_name: needed.player_name,
                                 team_name: needed.entry_name,
                                 fpl_id: playerId,
@@ -103,11 +95,14 @@ const dataPath = './api/data/managers.json';
                             newUser.save((err, result) => {
                                 console.log(result)
                                 res.send(result)
-                            }) 
+                            }) */ 
                             
                         } else {
-                            return res.send('no')
-                        } */
+                            return res.send({
+                                message: "You do not qualify",
+                                reason: playerId
+                            })
+                        }
                          
                     }
                 })
