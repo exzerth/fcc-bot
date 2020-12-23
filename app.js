@@ -6,7 +6,7 @@ const app = express();
 const playerRoutes = require('./api/routes/player');
 
 //connect mongodb
-mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://127.0.0.1:27017/fplgroup',{ useNewUrlParser: true, useUnifiedTopology: true })
 .then(_result => {
 console.log("Database connected");
 })

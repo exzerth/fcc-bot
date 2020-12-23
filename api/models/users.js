@@ -5,6 +5,9 @@ const userSchema = new mongoose.Schema({
     manager_name: String,
     team_name: String,
     fpl_id: 'number',
+    points: 'number',
+    hit: 'number',
+    total_point: 'number'
 }),
 
 //Define the model for user

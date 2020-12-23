@@ -62,50 +62,106 @@ const User = require('../models/users')
                 let d = (newData[0].results)
                 //cutout first 30
                 const needed = d.slice(0, 30)
+                // console.log(needed)
 
-                let userIdArr = []
+                let matchFound = false;
                 for(let i = 0; i < needed.length; i++) {
-                    const c = needed[i]
-                    userIdArr = userIdArr.concat(c.entry)
+                    if(playerId == needed[i].entry) {
+                        matchFound = true;
+                    User.findOne({fpl_id: playerId}, (err, data) => {
+                        if(data) {
+                            res.json('user already registered')
+                        }
+                    request(`https://fantasy.premierleague.com/api/entry/${playerId}/history/`, (err, resp, body) => {
+                        let data = JSON.parse(body)
+                        console.log(data)
+                        let newData = Object.values(data)
+                //delete las two arrays
+                newData.splice(1, 2)
+                //console log values of the new array
+                // console.log(newData[0])
+
+                var imp = []
+                //filter out required data and push to an array
+                newData[0].forEach(current => {
+                    imp.push({
+                        "tp": current.points,
+                        "hit": current.event_transfers_cost
+                    })
+                });
+                
+
+                //perform hits subtraction from points
+                let lastArr = imp.length - 1;
+
+                if (Number(imp[lastArr].hit < 0)) {
+                    console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
+                } else {
+                    console.log("No hits")
                 }
-            
+
+                        let newUser = new User({
+                            manager_name: needed[i].player_name,
+                            team_name: needed[i].entry_name,
+                            fpl_id: playerId,
+                            points: imp[imp.length - 1].tp,
+                            hit: imp[imp.length - 1].hit,
+                            total_point: imp[imp.length - 1].tp - imp[imp.length - 1].hit
+                        })
+                        newUser.save((err, result) => {
+                            console.log(result);
+                            res.json({
+                                message: "Registration successful",
+                                result: result
+                                 })
+                        })
+                    })
+                }) 
+                    break;
+                }
+            }
+
+                if(matchFound == false) {
+                    res.json('user didnt qualify')
+                }
+                
                 //Create new user and adding the details to the database
                 //check if user already exists using fpl id
-                User.findOne({fpl_id: playerId}, (err, data) => {
-                    if(data) {
-                        res.send('user already registered!')
-                    } else {
+                // User.findOne({fpl_id: playerId}, (err, data) => {
+                //     if(data) {
+                //         res.send('user already registered!')
+                //     } else {
 
-                        if(userIdArr.includes(Number(playerId)) === true){
+                //         if(userIdArr.includes(Number(playerId)) === true){
 
-                            request(`https://fantasy.premierleague.com/api/entry/${playerId}/`, (err, resp, body) => {
-                                let managerData = JSON.parse(body);
-                                let managerDataArr = Object.values(managerData)
+                //             request(`https://fantasy.premierleague.com/api/entry/${playerId}/`, (err, resp, body) => {
+                //                 let managerData = JSON.parse(body);
+                //                 let managerDataArr = Object.values(managerData)
 
-                                //create new user and register it
-                                let newUser = new User({
-                                    manager_name: `${managerDataArr[4]} ${managerDataArr[5]}`,
-                                    team_name: managerDataArr[16],
-                                    fpl_id: playerId,
-                                });
-                                newUser.save((err, result) => {
-                                    console.log(result)
-                                    res.send({
-                                        message: "Registration successful",
-                                        result: result
-                                    })
-                                })
-                            })  
+                //                 //create new user and register it
+                //                 let newUser = new User({
+                //                     manager_name: `${managerDataArr[4]} ${managerDataArr[5]}`,
+                //                     team_name: managerDataArr[16],
+                //                     fpl_id: playerId,
+                //                 });
+                //                 newUser.save((err, result) => {
+                //                     console.log(result)
+                //                     res.send({
+                //                         message: "Registration successful",
+                //                         result: result
+                //                     })
+                //                 })
+                //             })  
                             
-                        } else {
-                            return res.send({
-                                message: "You do not qualify",
-                                reason: playerId
-                            })
-                        }
+                //         } else {
+                //             return res.send({
+                //                 message: "You do not qualify",
+                //                 reason: playerId
+                //             })
+                //         }
                          
-                    }
-                })
+                //     }
+                // })
     
         })
 
