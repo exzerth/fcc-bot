@@ -1,12 +1,12 @@
 const express = require('express')
-const fs = require('fs');
+//const fs = require('fs');
 const request = require('request')
 const User = require('../models/users')
 
-const dataPath = './api/data/managers.json';
+//const dataPath = './api/data/managers.json';
 
     // helper methods
-    const readFile = (callback, returnJson = false, filePath = dataPath, encoding = 'utf8') => {
+    /* const readFile = (callback, returnJson = false, filePath = dataPath, encoding = 'utf8') => {
         fs.readFile(filePath, encoding, (err, data) => {
             if (err) {
                 throw err;
@@ -25,7 +25,7 @@ const dataPath = './api/data/managers.json';
 
             callback();
         });
-    };
+    }; */
 
 
     
@@ -57,20 +57,17 @@ const dataPath = './api/data/managers.json';
                 let data = JSON.parse(body)
                 //filter values of object returned into an array
                 let newData = Object.values(data)
-                //console.log(newData)
                 //delete first two arrays
                 newData.splice(0, 2)
                 let d = (newData[0].results)
                 //cutout first 30
                 const needed = d.slice(0, 30)
-                //console.log(needed)
 
                 let userIdArr = []
                 for(let i = 0; i < needed.length; i++) {
                     const c = needed[i]
                     userIdArr = userIdArr.concat(c.entry)
                 }
-                //console.log(userIdArr)
             
                 //Create new user and adding the details to the database
                 //check if user already exists using fpl id
@@ -79,23 +76,26 @@ const dataPath = './api/data/managers.json';
                         res.send('user already registered!')
                     } else {
 
-                        console.log("playerid", playerId)
-
                         if(userIdArr.includes(Number(playerId)) === true){
-                            res.send({
-                                message: "Registration successful",
-                                reason: playerId
-                            })
-                             //create new user and register it
-                            /* let newUser = new User({
-                                manager_name: needed.player_name,
-                                team_name: needed.entry_name,
-                                fpl_id: playerId,
-                            });
-                            newUser.save((err, result) => {
-                                console.log(result)
-                                res.send(result)
-                            }) */ 
+
+                            request(`https://fantasy.premierleague.com/api/entry/${playerId}/`, (err, resp, body) => {
+                                let managerData = JSON.parse(body);
+                                let managerDataArr = Object.values(managerData)
+
+                                //create new user and register it
+                                let newUser = new User({
+                                    manager_name: `${managerDataArr[4]} ${managerDataArr[5]}`,
+                                    team_name: managerDataArr[16],
+                                    fpl_id: playerId,
+                                });
+                                newUser.save((err, result) => {
+                                    console.log(result)
+                                    res.send({
+                                        message: "Registration successful",
+                                        result: result
+                                    })
+                                })
+                            })  
                             
                         } else {
                             return res.send({
@@ -109,10 +109,8 @@ const dataPath = './api/data/managers.json';
     
         })
 
-            
-    
-}
     }
+}
 
    
 module.exports = PlayerController;
@@ -143,84 +141,4 @@ module.exports = PlayerController;
                 } else {
                     console.log("No hits")
                 }
-
-
-
-
-
-
-//MANAGER**
-
-/* const managerId = document.getElementById("manager-id");
-const getManager = document.getElementById("get-manager");
-
-
-getManager.addEventListener("click", c)
-
-function c() {
-    let managers = []
-
-    fetch(`https://fantasy.premierleague.com/api/entry/${managerId.value}/`)
-    .then(res => res.json())
-    .then(data => {
-        //console.log(data)
-
-        let dataArr = Object.values(data)
-        let myData = ({
-            "Id": dataArr[0],
-            "TeamName": dataArr[16],
-            "ManagerName": `${dataArr[4]} ${dataArr[5]}`
-        })
-
-        managers.push(myData.TeamName)
-        console.log(managers)
-
-    })
-} */
-
-
-//c()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* function c() {
-    fetch("https://fantasy.premierleague.com/api/bootstrap-static/")
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-        let newData = Object.values(data)
-        newData.splice(1, 2)
-        console.log(newData[0])
-
-        newData[0].forEach(current => {
-            console.log({
-                "hit": current.event_transfers_cost
-            })
-        });
-    })
-}c()*/
+*/
