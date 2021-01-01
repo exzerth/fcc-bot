@@ -41,10 +41,6 @@ const User = require('../models/users')
         })
     },
 
-
-
-
-
     
     // CREATE
     registerUser: function(req, res) {
@@ -72,59 +68,31 @@ const User = require('../models/users')
                         if(data) {
                             res.json('user already registered')
                         }
-                    request(`https://fantasy.premierleague.com/api/entry/${playerId}/history/`, (err, resp, body) => {
-                        let data = JSON.parse(body)
-                        console.log(data)
-                        let newData = Object.values(data)
-                //delete las two arrays
-                newData.splice(1, 2)
-                //console log values of the new array
-                // console.log(newData[0])
-
-                var imp = []
-                //filter out required data and push to an array
-                newData[0].forEach(current => {
-                    imp.push({
-                        "tp": current.points,
-                        "hit": current.event_transfers_cost
-                    })
-                });
-                
-
-                //perform hits subtraction from points
-                let lastArr = imp.length - 1;
-
-                if (Number(imp[lastArr].hit < 0)) {
-                    console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
-                } else {
-                    console.log("No hits")
-                }
-
                         let newUser = new User({
-                            manager_name: needed[i].player_name,
-                            team_name: needed[i].entry_name,
-                            fpl_id: playerId,
-                            points: imp[imp.length - 1].tp,
-                            hit: imp[imp.length - 1].hit,
-                            total_point: imp[imp.length - 1].tp - imp[imp.length - 1].hit
-                        })
-                        newUser.save((err, result) => {
-                            console.log(result);
-                            res.json({
-                                message: "Registration successful",
-                                result: result
-                                 })
-                        })
+                                manager_name: needed[i].player_name,
+                                team_name: needed[i].entry_name,
+                                fpl_id: playerId,
+                                points: 0,
+                                hit: 0,
+                                total_point: 0
+                            })
+                            newUser.save((err, result) => {
+                                console.log(result);
+                                res.json({
+                                    message: "Registration successful",
+                                    result: result
+                                     })
+                            })
                     })
-                }) 
                     break;
-                }
             }
-
-                if(matchFound == false) {
+        }
+             if(matchFound == false) {
                     res.json('user didnt qualify')
-                }
-                
+                }  
+        })
+    },
+ 
                 //Create new user and adding the details to the database
                 //check if user already exists using fpl id
                 // User.findOne({fpl_id: playerId}, (err, data) => {
@@ -162,7 +130,47 @@ const User = require('../models/users')
                          
                 //     }
                 // })
+
+
+    showTables: function(req, res) {
+        User.find({}, (err, users) => {
+            if(err) throw err;
+            console.log(users)
+           for(let i = 0; i < users.length; i++) {
+            request(`https://fantasy.premierleague.com/api/entry/${users[i].fpl_id}/history/`, (err, resp, body) => {
+                let data = JSON.parse(body)
+                let newData = Object.values(data)
+              
+                //delete las two arrays
+                newData.splice(1, 2)
+                //console log values of the new array
+                // console.log(newData[0])
+
+                var imp = []
+                //filter out required data and push to an array
+                newData[0].forEach(current => {
+                    imp.push({
+                        "tp": current.points,
+                        "hit": current.event_transfers_cost
+                    })
+                });
+                
+                
+
+                //perform hits subtraction from points
+                let lastArr = imp.length - 1;
     
+                if (Number(imp[lastArr].hit < 0)) {
+                    console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
+                } else {
+                    console.log("No hits")
+                }
+                console.log(imp)
+            //updating the user points and total points
+            
+            
+            })
+        }
         })
 
     }
@@ -198,3 +206,25 @@ module.exports = PlayerController;
                     console.log("No hits")
                 }
 */
+
+
+// let newUser = new User({
+//     manager_name: needed[i].player_name,
+//     team_name: needed[i].entry_name,
+//     fpl_id: playerId,
+//     points: imp[imp.length - 1].tp,
+//     hit: imp[imp.length - 1].hit,
+//     total_point: imp[imp.length - 1].tp - imp[imp.length - 1].hit
+// })
+// newUser.save((err, result) => {
+//     console.log(result);
+//     res.json({
+//         message: "Registration successful",
+//         result: result
+//          })
+// })
+// })
+// }) 
+// break;
+// }
+// }
