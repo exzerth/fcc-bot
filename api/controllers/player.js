@@ -1,34 +1,7 @@
 const express = require('express')
-//const fs = require('fs');
 const request = require('request')
 const User = require('../models/users')
-
-//const dataPath = './api/data/managers.json';
-
-    // helper methods
-    /* const readFile = (callback, returnJson = false, filePath = dataPath, encoding = 'utf8') => {
-        fs.readFile(filePath, encoding, (err, data) => {
-            if (err) {
-                throw err;
-            }
-
-            callback(returnJson ? JSON.parse(data) : data);
-        });
-    };
-
-    const writeFile = (fileData, callback, filePath = dataPath, encoding = 'utf8') => {
-
-        fs.writeFile(filePath, fileData, encoding, (err) => {
-            if (err) {
-                throw err;
-            }
-
-            callback();
-        });
-    }; */
-
-
-    
+const Table = require('../models/tables')
 
     // READ
 
@@ -72,7 +45,7 @@ const User = require('../models/users')
                                 manager_name: needed[i].player_name,
                                 team_name: needed[i].entry_name,
                                 fpl_id: playerId,
-                                points: 0,
+                                points: needed[i],
                                 hit: 0,
                                 total_point: 0
                             })
@@ -135,42 +108,65 @@ const User = require('../models/users')
     showTables: function(req, res) {
         User.find({}, (err, users) => {
             if(err) throw err;
-            console.log(users)
-           for(let i = 0; i < users.length; i++) {
-            request(`https://fantasy.premierleague.com/api/entry/${users[i].fpl_id}/history/`, (err, resp, body) => {
-                let data = JSON.parse(body)
-                let newData = Object.values(data)
-              
-                //delete las two arrays
-                newData.splice(1, 2)
-                //console log values of the new array
-                // console.log(newData[0])
+            //console.log(users)
+            for(let i = 0; i < users.length; i++) {
+                request(`https://fantasy.premierleague.com/api/entry/${users[i].fpl_id}/history/`, (err, resp, body) => {
+                    let data = JSON.parse(body)
+                    let newData = Object.values(data);
+                
+                    //delete last two arrays
+                    newData.splice(1, 2)
+                    //console.log(newData[0])
+                    let playerArr = newData[0];
+                    let requiredPlayerArr = playerArr.splice(-1);
 
-                var imp = []
-                //filter out required data and push to an array
-                newData[0].forEach(current => {
-                    imp.push({
-                        "tp": current.points,
-                        "hit": current.event_transfers_cost
+                    /* let requiredPlayerArr = playerArr.splice(-1);
+                    let n = 0;
+                    let points;
+                    while (n < playerArr.length){
+                        points = [requiredPlayerArr.concat(requiredPlayerArr)];
+                        n++; 
+                    }
+                    //let points = requiredPlayerArr.map(player => player.points)
+                    
+                    console.log(points) */
+
+                
+                    //console.log("working array", newData[0][lastNewData]);
+                    let points = [];
+                    let newTable = new Table ({
+                        tp: requiredPlayerArr[0].points,
+                        hit: requiredPlayerArr[0].event_transfers_cost
                     })
-                });
-                
-                
+                    newTable.save((err, result) => {
+                        console.log(result);
+                        /* let points = Object.values(result)
+                        console.log(points) */
+                        
+                    })
 
-                //perform hits subtraction from points
-                let lastArr = imp.length - 1;
-    
-                if (Number(imp[lastArr].hit < 0)) {
-                    console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
-                } else {
-                    console.log("No hits")
-                }
-                console.log(imp)
-            //updating the user points and total points
-            
-            
-            })
-        }
+                    /* var imp = []
+                    //filter out required data and push to an array
+                    imp.push(impObj) */
+
+                    //console.log("first", impObj)
+                
+                    
+
+                    //perform hits subtraction from points
+                    /* let lastArr = imp.length - 1;
+        
+                    if (Number(imp[lastArr].hit < 0)) {
+                        console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
+                    } else {
+                        console.log("No hits")
+                    } */
+                    //res.send(imp)
+                //updating the user points and total points
+                
+                
+                })
+            }
         })
 
     }
@@ -178,53 +174,3 @@ const User = require('../models/users')
 
    
 module.exports = PlayerController;
-
-
-
-/* //filter values of object returned into an array
-                let newData = Object.values(data)
-                //delete las two arrays
-                newData.splice(1, 2)
-                //console log values of the new array
-                // console.log(newData[0])
-
-                var imp = []
-                //filter out required data and push to an array
-                newData[0].forEach(current => {
-                    imp.push({
-                        "tp": current.points,
-                        "hit": current.event_transfers_cost
-                    })
-                });
-
-                //perform hits subtraction from points
-                let lastArr = imp.length - 1;
-
-                if (Number(imp[lastArr].hit < 0)) {
-                    console.log(Number(imp[lastArr].tp) - Number(imp[lastArr].hit))
-                } else {
-                    console.log("No hits")
-                }
-*/
-
-
-// let newUser = new User({
-//     manager_name: needed[i].player_name,
-//     team_name: needed[i].entry_name,
-//     fpl_id: playerId,
-//     points: imp[imp.length - 1].tp,
-//     hit: imp[imp.length - 1].hit,
-//     total_point: imp[imp.length - 1].tp - imp[imp.length - 1].hit
-// })
-// newUser.save((err, result) => {
-//     console.log(result);
-//     res.json({
-//         message: "Registration successful",
-//         result: result
-//          })
-// })
-// })
-// }) 
-// break;
-// }
-// }
