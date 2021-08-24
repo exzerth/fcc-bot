@@ -6,10 +6,12 @@ const app = express();
 const playerRoutes = require('./api/routes/player');
 
 //connect mongodb
-mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true },{ useFindAndModify: false })
+mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true })
 .then(_result => {
 console.log("Database connected");
 })
+
+mongoose.set('useFindAndModify', false);
 
 
 //bodyparser middleware

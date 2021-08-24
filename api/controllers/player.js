@@ -34,7 +34,7 @@ const Table = require('../models/tables')
                                 total_point: element.total_points
                             };
                             User.findOneAndUpdate(filter, update, {returnOriginal: false}, (err, doc) => {
-                                console.log(doc)
+                                res.end()
                             })
                             /* console.log(manager.fpl_id)
                             console.log(element.overall_rank) */
@@ -68,7 +68,7 @@ const Table = require('../models/tables')
                         matchFound = true;
                     User.findOne({fpl_id: playerId}, (err, data) => {
                         if(data) {
-                            res.json('user already registered')
+                            return res.json('user already registered')
                         }
                         let newUser = new User({
                                 manager_name: qualifiedManagers[i].player_name,
