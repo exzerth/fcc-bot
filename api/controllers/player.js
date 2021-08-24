@@ -3,10 +3,10 @@ const request = require('request')
 const User = require('../models/users')
 const Table = require('../models/tables')
 
-    // READ
-
+    
     const PlayerController = {
 
+    // READ
     getUser: function(req, res) {
         //get all users
         User.find({}, (err, data) => {
@@ -14,43 +14,72 @@ const Table = require('../models/tables')
         })
     },
 
-    
+
+        //UPDATE
+        updateUser: function(req, res) {
+        
+            User.find({}, (err, data) => {
+                //console.log(data)
+                data.forEach(manager => {
+                    //console.log(manager.fpl_id)
+                    const managerUrl = `https://fantasy.premierleague.com/api/entry/${manager.fpl_id}/history/`;
+                    request(managerUrl, (err, resp, body) => {
+                        const newBody = JSON.parse(body);
+                        const managerHistory = (Object.values(newBody))[0];
+                        //console.log(managerHistory)
+                        managerHistory.forEach(element => {
+                            let filter = {fpl_id: manager.fpl_id};
+                            let update = {
+                                hit: element.event_transfers_cost,
+                                total_point: element.total_points
+                            };
+                            User.findOneAndUpdate(filter, update, {returnOriginal: false}, (err, doc) => {
+                                console.log(doc)
+                            })
+                            /* console.log(manager.fpl_id)
+                            console.log(element.overall_rank) */
+                        })
+                    });
+                });
+            });
+        },
+
+
     // CREATE
     registerUser: function(req, res) {
    
         let playerId = req.body.playerid;
 
-        const fplUrl = `https://fantasy.premierleague.com/api/leagues-classic/484467/standings/`;
+        const fplUrl = `https://fantasy.premierleague.com/api/leagues-classic/723328/standings/`;
 
         request(fplUrl, (err, resp, body) => {
-                let data = JSON.parse(body)
+                const data = JSON.parse(body)
                 //filter values of object returned into an array
-                let newData = Object.values(data)
-                //delete first two arrays
-                newData.splice(0, 2)
-                let d = (newData[0].results)
+                const newData = Object.values(data)
+                //get last array
+                const managersArr = (newData[newData.length - 1]).results;
                 //cutout first 30
-                const needed = d.slice(0, 30)
-                // console.log(needed)
+                const qualifiedManagers = managersArr.slice(0, 30)
+                //console.log(qualifiedManagers)
 
                 let matchFound = false;
-                for(let i = 0; i < needed.length; i++) {
-                    if(playerId == needed[i].entry) {
+                for(let i = 0; i < qualifiedManagers.length; i++) {
+                    if(+playerId === qualifiedManagers[i].entry) {
                         matchFound = true;
                     User.findOne({fpl_id: playerId}, (err, data) => {
                         if(data) {
                             res.json('user already registered')
                         }
                         let newUser = new User({
-                                manager_name: needed[i].player_name,
-                                team_name: needed[i].entry_name,
+                                manager_name: qualifiedManagers[i].player_name,
+                                team_name: qualifiedManagers[i].entry_name,
                                 fpl_id: playerId,
-                                points: needed[i],
+                                points: qualifiedManagers[i].event_total,
                                 hit: 0,
                                 total_point: 0
                             })
                             newUser.save((err, result) => {
-                                console.log(result);
+                                //console.log(result);
                                 res.json({
                                     message: "Registration successful",
                                     result: result
@@ -65,44 +94,6 @@ const Table = require('../models/tables')
                 }  
         })
     },
- 
-                //Create new user and adding the details to the database
-                //check if user already exists using fpl id
-                // User.findOne({fpl_id: playerId}, (err, data) => {
-                //     if(data) {
-                //         res.send('user already registered!')
-                //     } else {
-
-                //         if(userIdArr.includes(Number(playerId)) === true){
-
-                //             request(`https://fantasy.premierleague.com/api/entry/${playerId}/`, (err, resp, body) => {
-                //                 let managerData = JSON.parse(body);
-                //                 let managerDataArr = Object.values(managerData)
-
-                //                 //create new user and register it
-                //                 let newUser = new User({
-                //                     manager_name: `${managerDataArr[4]} ${managerDataArr[5]}`,
-                //                     team_name: managerDataArr[16],
-                //                     fpl_id: playerId,
-                //                 });
-                //                 newUser.save((err, result) => {
-                //                     console.log(result)
-                //                     res.send({
-                //                         message: "Registration successful",
-                //                         result: result
-                //                     })
-                //                 })
-                //             })  
-                            
-                //         } else {
-                //             return res.send({
-                //                 message: "You do not qualify",
-                //                 reason: playerId
-                //             })
-                //         }
-                         
-                //     }
-                // })
 
 
     showTables: function(req, res) {

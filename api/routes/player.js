@@ -8,5 +8,6 @@ const playerController = require('../controllers/player');
 router.post("/register", playerController.registerUser)
       .get('/users', playerController.getUser)
       .get('/tables', playerController.showTables)
+      .get('/updateUser', playerController.updateUser)
 
 module.exports = router;
