@@ -2,9 +2,45 @@ const express = require('express')
 const request = require('request')
 const User = require('../models/users')
 const Table = require('../models/tables')
+let automaticQualifiedManagers = [];
 
     
-    const PlayerController = {
+const PlayerController = {
+
+    //AUTOMATIC QUALIFICATIONS
+    makeUser: function(req, res) {
+
+        const managerName = req.body.managerName;
+        const teamName = req.body.teamName;
+        const fplId = req.body.fplId;
+        const points = req.body.points;
+        const hits = req.body.hit;
+        const totalPoints = req.body.totalPoint;
+
+        User.findOne({fpl_id: fplId}, (err, data) => {
+            if(data) {
+                return res.json('user already registered')
+            }
+            let qualifiedUser = new User({
+                manager_name: managerName,
+                team_name: teamName,
+                fpl_id: fplId,
+                points: points,
+                hit: hits,
+                total_point: totalPoints
+            })
+            automaticQualifiedManagers.push(qualifiedUser);
+            qualifiedUser.save((err, result) => {
+                //console.log(result);
+                res.json({
+                    message: "champion saved successfully",
+                    result: result
+                })
+            })
+            console.log(automaticQualifiedManagers)
+        })
+    },
+
 
     // READ
     getUser: function(req, res) {
@@ -59,7 +95,7 @@ const Table = require('../models/tables')
                 //get last array
                 const managersArr = (newData[newData.length - 1]).results;
                 //cutout first 30
-                const qualifiedManagers = managersArr.slice(0, 30)
+                const qualifiedManagers = managersArr.slice(0, 32)
                 //console.log(qualifiedManagers)
 
                 let matchFound = false;
@@ -83,7 +119,7 @@ const Table = require('../models/tables')
                                 res.json({
                                     message: "Registration successful",
                                     result: result
-                                     })
+                                })
                             })
                     })
                     break;
@@ -91,8 +127,10 @@ const Table = require('../models/tables')
         }
              if(matchFound == false) {
                     res.json('user didnt qualify')
-                }  
+                } 
         })
+
+        //winners check
     },
 
 
