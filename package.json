@@ -1,33 +1,22 @@
 {
   "name": "fcc-bot",
-  "version": "1.0.0",
-  "description": "a bot for fcc",
-  "main": "app.js",
-  "dependencies": {
-    "axios": "^0.21.0",
-    "browserify": "^17.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "mongodb": "^3.6.3",
-    "mongoose": "^5.11.7",
-    "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.6",
-    "request": "^2.88.2"
-  },
-  "devDependencies": {},
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RenegadeGandhi/fcc-bot.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/RenegadeGandhi/fcc-bot/issues"
-  },
-  "homepage": "https://github.com/RenegadeGandhi/fcc-bot#readme"
+  "dependencies": {
+    "@next/font": "13.0.7",
+    "dotenv": "^16.0.3",
+    "eslint": "8.30.0",
+    "eslint-config-next": "13.0.7",
+    "mongodb": "^4.13.0",
+    "next": "13.0.7",
+    "next-connect": "^0.13.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
 }
