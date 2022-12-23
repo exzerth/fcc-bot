@@ -28,7 +28,7 @@ const HomePage = ({ teams }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   try {
     const client = await clientPromise;
     const db = client.db("fpldata");
