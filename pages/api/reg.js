@@ -9,10 +9,11 @@ const handler = async (req, res) => {
 
     const teams = await db.collection("Teams");
 
+    //data of body is sent from the reg pages to this reg api
     await teams.insertOne(req.body);
 
     res.status(201).send({ Message: "Team inserted" });
-  } catch (e) {
+  } catch (error) {
     console.error(`Error connecting to MongoDB: ${error}`);
   }
 };
