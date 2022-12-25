@@ -1,36 +1,56 @@
-import data from "/utils/GroupedTeams.json";
+import clientPromise from "../lib/mongodb";
 
-const testg = () => {
+const testg = ({ groupedTeams }) => {
   return (
     <div>
-      {data.map((group, index) => (
-        <table key={index}>
-          <thead>
-            <tr>
-              <th>Manager Name</th>
-              <th>Team Name</th>
-              <th>Gameweek Points</th>
-              <th>Transfer Cost</th>
-              <th>Bench Points</th>
-              <th>Match Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {group.group.map((team) => (
-              <tr key={team["Fpl Id"]}>
-                <td>{team["Manager Name"]}</td>
-                <td>{team["Team Name"]}</td>
-                <td>{team["Gameweek Points"]}</td>
-                <td>{team["Transfer Cost"]}</td>
-                <td>{team["Bench Points"]}</td>
-                <td>{team["Match Points"]}</td>
+      {groupedTeams.map((group, index) => (
+        <div key={index}>
+          <div className="font-bold">{group.group[0].group}</div>
+          <table>
+            <thead>
+              <tr>
+                <th title="Team Name">Team Name</th>
+                <th title="Played">Played</th>
+                <th title="Win">Win</th>
+                <th title="Draw">Draw</th>
+                <th title="Lose">Lose</th>
+                <th title="Points">Points</th>
+                <th title="Total Score">Total Score</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {group.group.map((team) => (
+                <tr key={team._id}>
+                  <td>{team.TeamName}</td>
+                  <td>{team.Played}</td>
+                  <td>{team.Win}</td>
+                  <td>{team.Draw}</td>
+                  <td>{team.Lose}</td>
+                  <td>{team.Points}</td>
+                  <td>{team.TotalScore}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ))}
     </div>
   );
 };
+
+export async function getServerSideProps({ props }) {
+  try {
+    const client = await clientPromise;
+    const db = client.db("fpldata");
+
+    const groupedTeams = await db.collection("GroupedTeams").find({}).toArray();
+
+    return {
+      props: { groupedTeams: JSON.parse(JSON.stringify(groupedTeams)) },
+    };
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export default testg;

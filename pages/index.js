@@ -9,14 +9,14 @@ const HomePage = ({ teams }) => {
       <div className="container w-[500px] mx-auto flex flex-col justify-center items-center mt-[50px] border-2 rounded-[5px]">
         <div className="font-semibold text-2xl pb-2">REGISTERED TEAMS</div>
         {teams.map((team) => (
-          <div className="self-start py-2" key={team["Fpl Id"]}>
+          <div className="self-start py-2" key={team.FplId}>
             <div>
               <span className="font-medium">Team Name: </span>
-              {team["Team Name"]}{" "}
+              {team.TeamName}{" "}
             </div>
             <div>
               <span className="font-medium">Manager Name: </span>
-              {team["Manager Name"]}
+              {team.ManagerName}
             </div>
           </div>
         ))}

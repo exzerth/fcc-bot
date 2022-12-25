@@ -7,6 +7,7 @@ const handler = async (req, res) => {
     const db = client.db("fpldata");
     const teams = await db.collection("Teams");
     const groupedTeams = await db.collection("GroupedTeams");
+    await groupedTeams.drop();
 
     //create team array from team collection
     const teamsArr = await teams.find({}).toArray();

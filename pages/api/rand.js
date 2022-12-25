@@ -43,7 +43,7 @@ const handler = async (req, res) => {
     }
 
     await addKey();
-    res.status(201).send({ Message: "Team inserted" });
+    res.status(201).send({ Message: "Group Identifier Added" });
   } catch (error) {
     console.error(`Error connecting to MongoDB: ${error}`);
   }

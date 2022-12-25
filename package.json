@@ -14,6 +14,7 @@
     "eslint": "8.30.0",
     "eslint-config-next": "13.0.7",
     "fpl-ts": "^1.0.0",
+    "fs": "0.0.1-security",
     "group-array": "^1.0.0",
     "mongodb": "^4.13.0",
     "next": "13.0.7",

@@ -18,13 +18,25 @@ const NewTeamForm = () => {
     const user = new User(fplId);
 
     const details = await user.getDetails();
-    const history = await user.gwHistory();
+    //const history = await user.gwHistory();
     console.log(`Details: ${details}`);
-    console.log(`History: ${history}`);
+    //console.log(`History: ${history}`);
 
     // store team data in an object
 
     const teamData = {
+      FplId: details.id,
+      ManagerName: `${details.player_first_name} ${details.player_last_name}`,
+      TeamName: details.name,
+      Played: "",
+      Win: "",
+      Draw: "",
+      Lose: "",
+      Points: "",
+      TotalScore: "",
+    };
+
+    /* const teamData = {
       "Fpl Id": details.id,
       "Manager Name": `${details.player_first_name} ${details.player_last_name}`,
       "Team Name": details.name,
@@ -34,7 +46,7 @@ const NewTeamForm = () => {
       "Match Points":
         history[history.length - 1].points -
         history[history.length - 1].event_transfers_cost,
-    };
+    }; */
 
     // use of Fetch API to make a request to the new-meal api and get back a response
     const response = await fetch("/api/reg", {
