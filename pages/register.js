@@ -36,20 +36,8 @@ const NewTeamForm = () => {
       TotalScore: "",
     };
 
-    /* const teamData = {
-      "Fpl Id": details.id,
-      "Manager Name": `${details.player_first_name} ${details.player_last_name}`,
-      "Team Name": details.name,
-      "Gameweek Points": history[history.length - 1].points,
-      "Transfer Cost": history[history.length - 1].event_transfers_cost,
-      "Bench Points": history[history.length - 1].points_on_bench,
-      "Match Points":
-        history[history.length - 1].points -
-        history[history.length - 1].event_transfers_cost,
-    }; */
-
-    // use of Fetch API to make a request to the new-meal api and get back a response
-    const response = await fetch("/api/reg", {
+    // use of Fetch API to make a request to the register api and get back a response
+    const response = await fetch("/api/register", {
       method: "POST",
       body: JSON.stringify(teamData),
       headers: {

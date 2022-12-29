@@ -22,7 +22,7 @@ const HomePage = ({ teams }) => {
         ))}
       </div>
       <div className="flex justify-center mt-[20px] text-[blue]">
-        <Link href="/reg">Register here</Link>
+        <Link href="/register">Register here</Link>
       </div>
     </>
   );
@@ -41,18 +41,6 @@ export async function getServerSideProps() {
   } catch (error) {
     console.error(error);
   }
-
-  /* return {
-    props: {
-      mealList: teams.map((team) => ({
-        id: team._id.toString(),
-        name: team.name,
-        image: team.image_path,
-        dish: team.dishes,
-        chef: team.chef,
-      })),
-    },
-  }; */
 }
 
 export default HomePage;

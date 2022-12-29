@@ -1,6 +1,6 @@
 import clientPromise from "../lib/mongodb";
 
-const testg = ({ groupedTeams }) => {
+const group = ({ groupedTeams }) => {
   return (
     <div>
       {groupedTeams.map((group, index) => (
@@ -53,4 +53,4 @@ export async function getServerSideProps({ props }) {
   }
 }
 
-export default testg;
+export default group;
