@@ -1,6 +1,7 @@
 import clientPromise from "../../lib/mongodb";
 import groupArray from "group-array";
 
+//To group teams
 const handler = async (req, res) => {
   try {
     const client = await clientPromise;

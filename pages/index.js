@@ -1,5 +1,5 @@
-/* import Head from 'next/head'
-import styles from '../styles/Home.module.css' */
+/* Homepage
+cuyrrently displays the registered teams */
 import clientPromise from "../lib/mongodb";
 import Link from "next/link";
 
@@ -41,18 +41,6 @@ export async function getServerSideProps() {
   } catch (error) {
     console.error(error);
   }
-
-  /* return {
-    props: {
-      mealList: teams.map((team) => ({
-        id: team._id.toString(),
-        name: team.name,
-        image: team.image_path,
-        dish: team.dishes,
-        chef: team.chef,
-      })),
-    },
-  }; */
 }
 
 export default HomePage;

@@ -1,3 +1,4 @@
+//Teams registration page
 import { useRef } from "react";
 import { useRouter } from "next/router";
 import { User } from "fpl-ts";
@@ -9,7 +10,7 @@ const NewTeamForm = () => {
   // use of useRouter from next/router to redirect this page to the Homepage
   const router = useRouter();
 
-  // implementation of newMealHandler function
+  // implementation of newTeamHandler function
   const newTeamHandler = async (event) => {
     event.preventDefault();
 

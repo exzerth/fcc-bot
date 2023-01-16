@@ -1,5 +1,3 @@
-//const teamArr = require("../../utils/Teams.json");
-
 import clientPromise from "../../lib/mongodb";
 
 const handler = async (req, res) => {
