@@ -1,9 +1,10 @@
-import React from "react";
-import clientPromise from "../lib/mongodb";
-
 /* To display fixtures only */
-const Matchup = ({ fixtures }) => {
-  const matchup = fixtures[0].matchups;
+interface FixturesProps {
+  fixtures: {}
+}
+
+const Fixtures: React.FC<FixturesProps> = ({ fixtures }) => {
+  const matchup = fixtures[0].matchups
 
   /* 
   reduce() method is used to iterate through the matchup array.
@@ -16,25 +17,25 @@ const Matchup = ({ fixtures }) => {
    */
 
   const reducedMatchup = matchup.reduce(
-    (acc, curr, index) => {
+    (acc: any[][], curr: any, index: number) => {
       if (index < 6) {
-        acc[0].push(curr);
+        acc[0].push(curr)
       } else if (index == 6 || index < 12) {
-        acc[1].push(curr);
+        acc[1].push(curr)
       } else if (index == 12 || index < 18) {
-        acc[2].push(curr);
+        acc[2].push(curr)
       } else if (index == 18 || index < 24) {
-        acc[3].push(curr);
+        acc[3].push(curr)
       }
-      return acc;
+      return acc
     },
     [[], [], [], []]
-  );
+  )
 
-  const groupA = reducedMatchup[0].flat(Infinity);
-  const groupB = reducedMatchup[1].flat(Infinity);
-  const groupC = reducedMatchup[2].flat(Infinity);
-  const groupD = reducedMatchup[3].flat(Infinity);
+  const groupA = reducedMatchup[0].flat(Infinity)
+  const groupB = reducedMatchup[1].flat(Infinity)
+  const groupC = reducedMatchup[2].flat(Infinity)
+  const groupD = reducedMatchup[3].flat(Infinity)
 
   return (
     <>
@@ -69,22 +70,7 @@ const Matchup = ({ fixtures }) => {
         </p>
       </div>
     </>
-  );
-};
-
-export async function getServerSideProps() {
-  try {
-    const client = await clientPromise;
-    const db = client.db("fpldata");
-
-    const fixtures = await db.collection("Fxtures").find({}).toArray();
-
-    return {
-      props: { fixtures: JSON.parse(JSON.stringify(fixtures)) },
-    };
-  } catch (error) {
-    console.error(error);
-  }
+  )
 }
 
-export default Matchup;
+export default Fixtures

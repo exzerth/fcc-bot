@@ -6,8 +6,22 @@ const handler = async (req, res) => {
     // Connect to the MongoDB database
     const client = await clientPromise;
     const db = client.db("fpldata");
-    const fixturesData = await db.collection("Fixtures").find().toArray();
-    const groupedTeamsData = await db
+    const gameweeeks = await db.collection("Gameweeks").find().toArray();
+
+    let gwData = gameweeeks;
+
+    let gweekOne, gweekTwo;
+    for (let i = 0; i < gwData.length; i++) {
+      let item = gwData[i];
+      if (item.hasOwnProperty("gameweekOne")) {
+        gweekOne = item.gameweekOne;
+      } else if (item.hasOwnProperty("gameweekTwo")) {
+        gweekTwo = item.gameweekTwo;
+      }
+    }
+
+    res.send(gweekOne["1"][0]);
+    /* const groupedTeamsData = await db
       .collection("GroupedTeams")
       .find()
       .toArray();
@@ -42,7 +56,7 @@ const handler = async (req, res) => {
         home_team.points += 1;
         away_team.points += 1;
       }
-    }
+    } */
 
     /* // Iterate through grouped teams, updating total points based on updated scores
     for (let i = 0; i < groupedTeamsData.length; i++) {
@@ -60,7 +74,7 @@ const handler = async (req, res) => {
       }
     ); */
 
-    res.status(201).send({ Message: "Scores Updated" });
+    //res.status(201).send({ Message: "Scores Updated" });
   } catch (error) {
     console.error(`Error connecting to MongoDB: ${error}`);
     res.status(500).send({ Error: "Error updating scores" });

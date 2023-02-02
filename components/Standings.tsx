@@ -1,9 +1,13 @@
-import clientPromise from "../lib/mongodb";
+import { Key } from "react"
 
-const group = ({ groupedTeams }) => {
+interface StandingsProps {
+  groupedTeams: any
+}
+
+const Standings: React.FC<StandingsProps> = ({ groupedTeams }) => {
   return (
     <div>
-      {groupedTeams.map((group, index) => (
+      {groupedTeams.map((group: any, index: Key) => (
         <div key={index}>
           <div className="font-bold">{group.group[0].group}</div>
           <table>
@@ -19,7 +23,7 @@ const group = ({ groupedTeams }) => {
               </tr>
             </thead>
             <tbody>
-              {group.group.map((team) => (
+              {group.group.map((team: any) => (
                 <tr key={team._id}>
                   <td>{team.TeamName}</td>
                   <td>{team.Played}</td>
@@ -35,22 +39,7 @@ const group = ({ groupedTeams }) => {
         </div>
       ))}
     </div>
-  );
-};
-
-export async function getServerSideProps({ props }) {
-  try {
-    const client = await clientPromise;
-    const db = client.db("fpldata");
-
-    const groupedTeams = await db.collection("GroupedTeams").find({}).toArray();
-
-    return {
-      props: { groupedTeams: JSON.parse(JSON.stringify(groupedTeams)) },
-    };
-  } catch (error) {
-    console.error(error);
-  }
+  )
 }
 
-export default group;
+export default Standings
