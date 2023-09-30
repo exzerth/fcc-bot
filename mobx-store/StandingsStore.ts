@@ -3,14 +3,6 @@ import axios from "axios"
 
 configure({ enforceActions: "always" })
 
-const resolveURL = () => {
-  if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3000/api/standings"
-  } else {
-    return `https://${window.origin}/api/standings`
-  }
-}
-
 export class StandingsStore {
   loading = true
   standings: any
@@ -21,7 +13,7 @@ export class StandingsStore {
 
   getStandings = async () => {
     try {
-      const response = await axios.get(`${resolveURL()}`, {
+      const response = await axios.get(`${window.origin}/api/standings`, {
         headers: {
           "Cache-Control": "no-store",
         },
