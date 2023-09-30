@@ -1,41 +1,31 @@
-import toast, { ToastBar, Toaster } from "react-hot-toast"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const Header = () => {
+  const pathname = usePathname()
   return (
-    <nav>
-      <Toaster
-        position="top-center"
-        reverseOrder={true}
-        containerStyle={{
-          top: 100,
-        }}
-        toastOptions={{
-          duration: 5000,
-        }}
-      >
-        {(t) => (
-          <ToastBar toast={t}>
-            {({ icon, message }) => (
+    <nav className="bg-[#57358d] sticky top-0">
+      <div className="container px-6 mx-auto py-6 flex justify-between items-center">
+        <div className="logo">
+          <Link href="/" className="font-bold text-2xl text-slate-100">
+            F.C.C
+          </Link>
+        </div>
+        <div className="pages">
+          <div className="flex justify-center gap-7 text-slate-100">
+            {pathname === "/" ? (
+              <Link href="/teams">Teams</Link>
+            ) : (
               <>
-                {t.type !== "loading" && (
-                  <button
-                    onClick={() => toast.dismiss(t.id)}
-                    style={{
-                      width: "50px",
-                      background: "white",
-                      border: "none",
-                    }}
-                  >
-                    {icon}
-                  </button>
-                )}
-                {message}
+                <Link href="/">Join League</Link>
+                <Link href="/teams">Teams</Link>
+                <Link href="/standings">Standings</Link>
+                <Link href="/fixtures">Fixtures</Link>
               </>
             )}
-          </ToastBar>
-        )}
-      </Toaster>
-      <h1>Head</h1>
+          </div>
+        </div>
+      </div>
     </nav>
   )
 }

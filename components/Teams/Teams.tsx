@@ -1,71 +1,57 @@
 "use client"
 
-import { Key, useEffect, useState } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-
-type Teams = {
-  id: number
-  created_at: Date
-  fpl_id: string
-  manager_name: string
-  team_name: string
-  win: string
-  draw: string
-  lose: string
-  points: string
-  total_score: string
-  played: string
-}
+import { Key, useContext, useEffect, useState } from "react"
+import { StoreContext } from "@/mobx-store/RootStore"
+import { Teams } from "@/types/teams"
 
 const Teams = () => {
-  const [teams, setTeams] = useState<any>([])
-  const [loading, setLoading] = useState(false)
-  const supabase = createClientComponentClient<any>()
+  const { teamsStore } = useContext(StoreContext)
+  const { loading } = teamsStore
+  const [teams, setTeams] = useState<Teams[]>()
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      setLoading(true)
-      const { data: teams, error } = await supabase.from("teams").select()
-
-      if (error) {
-        console.log("error", error)
-      } else {
-        setTeams(teams)
-        setLoading(false)
-      }
+    const fetchTeams = async () => {
+      await teamsStore.getTeams()
+      const { teams } = teamsStore
+      setTeams(teams)
     }
-    fetchJobs()
-  }, [supabase])
+    fetchTeams()
+  }, [])
 
   return (
-    <div className="container w-[500px] mx-auto flex flex-col justify-center items-center mt-[50px] border-2 rounded-[5px]">
-      <div className="pb-2 text-2xl font-semibold">REGISTERED TEAMS</div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          {teams.length > 0 ? (
-            <>
-              {teams.map((team: Teams, index: Key) => (
-                <div key={index}>
-                  <div className="self-start py-2">
-                    <div>
-                      <span className="font-medium">Team Name: </span>
-                      {team.team_name}{" "}
-                    </div>
-                    <div>
-                      <span className="font-medium">Manager Name: </span>
-                      {team.manager_name}
-                    </div>
+    <div className="container px-6 mx-auto min-h-[100vh]">
+      <div className="mt-[20px] rounded-[5px]">
+        <h1 className="text-3xl font-semibold text-slate-100 text-center mb-6">
+          REGISTERED TEAMS
+        </h1>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            {teams && teams?.length > 0 ? (
+              <div className="grid grid-cols-4 gap-6">
+                {teams.map((team, index: Key) => (
+                  <div
+                    className="grid items-center mb-4 bg-white bg-opacity-60 rounded-xl p-4 min-h-[110px]"
+                    key={index}
+                  >
+                    <p>
+                      <span className="font-medium">Team Name</span> :{" "}
+                      {team.TeamName}
+                    </p>
+                    <p>
+                      <span className="font-medium">Manager Name</span>:{" "}
+                      {team.ManagerName}
+                    </p>
                   </div>
-                </div>
-              ))}
-            </>
-          ) : (
-            <p>Registration TBA</p>
-          )}
-        </>
-      )}
+                ))}
+              </div>
+            ) : (
+              <p>Registration TBA</p>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,13 +1,25 @@
-import { Key } from "react"
+"use client"
 
-interface StandingsProps {
-  groupedTeams: any
-}
+import { StoreContext } from "@/mobx-store/RootStore"
+import { Key, useContext, useEffect, useState } from "react"
 
-const Standings: React.FC<StandingsProps> = ({ groupedTeams }) => {
+const Standings = () => {
+  const { standingsStore } = useContext(StoreContext)
+  const { loading } = standingsStore
+  const [standings, setStandings] = useState<any>()
+
+  useEffect(() => {
+    const fetchStandings = async () => {
+      await standingsStore.getStandings()
+      const { standings } = standingsStore
+      setStandings(standings)
+    }
+    fetchStandings()
+  }, [])
   return (
     <div>
-      {groupedTeams.map((group: any, index: Key) => (
+      <h2>hello</h2>
+      {standings?.map((group: any, index: Key) => (
         <div key={index}>
           <div className="font-bold">{group.group[0].group}</div>
           <table>

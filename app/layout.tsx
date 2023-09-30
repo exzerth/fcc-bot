@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout/Layout"
 import "./globals.css"
 import type { Metadata } from "next"
-import { AuthContextProvider } from "@/context/AuthContext"
+//import { AuthContextProvider } from "@/context/AuthContext"
 
 export const metadata: Metadata = {
   title: "FCC",
@@ -16,9 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthContextProvider>
+        <Layout>{children}</Layout>
+        {/* <AuthContextProvider>
           <Layout>{children}</Layout>
-        </AuthContextProvider>
+        </AuthContextProvider> */}
       </body>
     </html>
   )

@@ -1,15 +1,9 @@
-import Link from "next/link"
-import Teams from "@/components/Teams/Teams"
+import RegisterTeam from "@/components/Auth/RegisterTeam"
 
 export default function Home() {
   return (
-    <>
-      <Teams />
-      <div className="flex justify-center gap-7 mt-[20px] text-[blue]">
-        <Link href="/register">Register</Link>
-        <Link href="/standings">Standings</Link>
-        <Link href="/fixtures">Fixtures</Link>
-      </div>
-    </>
+    <div className="register_team h-[100vh] flex justify-center items-center  -mt-[70px]">
+      <RegisterTeam />
+    </div>
   )
 }
