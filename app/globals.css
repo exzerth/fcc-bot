@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(to right bottom, #9554fe, #3ce3fe);
+  background-repeat: no-repeat;
+}
+
+.register_team {
+  background-image: url("../public/images/EnglishPremierLeague.vresize.350.350.medium.0.webp"),
+    linear-gradient(to right bottom, #9554fe, #3ce3fe);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 600px, auto;
+}
