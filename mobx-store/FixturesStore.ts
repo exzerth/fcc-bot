@@ -13,7 +13,7 @@ export class FixturesStore {
 
   getFixtures = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/fixtures", {
+      const response = await axios.get(`http://${window.origin}/api/fixtures`, {
         headers: {
           "Cache-Control": "no-store",
         },

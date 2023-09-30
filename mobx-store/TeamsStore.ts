@@ -21,7 +21,7 @@ export class TeamsStore {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/teams",
+        `http://${window.origin}/api/teams`,
         teamData,
         {
           headers,
@@ -45,7 +45,7 @@ export class TeamsStore {
 
   getTeams = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/teams", {
+      const response = await axios.get(`http://${window.origin}/api/teams`, {
         headers: {
           "Cache-Control": "no-store",
         },
