@@ -3,6 +3,13 @@ import axios from "axios"
 
 configure({ enforceActions: "always" })
 
+const resolveURL = () => {
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000/api/fixtures"
+  } else {
+    return `https://${window.origin}/api/fixtures`
+  }
+}
 export class FixturesStore {
   loading = true
   fixtures: any
@@ -13,7 +20,7 @@ export class FixturesStore {
 
   getFixtures = async () => {
     try {
-      const response = await axios.get(`http://${window.origin}/api/fixtures`, {
+      const response = await axios.get(`${resolveURL()}`, {
         headers: {
           "Cache-Control": "no-store",
         },

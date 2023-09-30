@@ -4,6 +4,14 @@ import toast from "react-hot-toast"
 
 configure({ enforceActions: "always" })
 
+const resolveURL = () => {
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000/api/teams"
+  } else {
+    return `https://${window.origin}/api/teams`
+  }
+}
+
 export class TeamsStore {
   loading = true
   teams: any
@@ -20,13 +28,9 @@ export class TeamsStore {
     }
 
     try {
-      const response = await axios.post(
-        `http://${window.origin}/api/teams`,
-        teamData,
-        {
-          headers,
-        }
-      )
+      const response = await axios.post(`${resolveURL()}`, teamData, {
+        headers,
+      })
 
       this.setLoading(false)
 
@@ -45,7 +49,7 @@ export class TeamsStore {
 
   getTeams = async () => {
     try {
-      const response = await axios.get(`http://${window.origin}/api/teams`, {
+      const response = await axios.get(`${resolveURL()}`, {
         headers: {
           "Cache-Control": "no-store",
         },
