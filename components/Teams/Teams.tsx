@@ -29,7 +29,7 @@ const Teams = () => {
         ) : (
           <>
             {teams && teams?.length > 0 ? (
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid md:grid-cols-4 gap-6">
                 {teams.map((team, index: Key) => (
                   <div
                     className="grid items-center mb-4 bg-white bg-opacity-60 rounded-xl p-4 min-h-[110px]"

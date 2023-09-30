@@ -13,11 +13,14 @@ export class StandingsStore {
 
   getStandings = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/standings", {
-        headers: {
-          "Cache-Control": "no-store",
-        },
-      })
+      const response = await axios.get(
+        `http://${window.origin}/api/standings`,
+        {
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      )
 
       if (response.status !== 200) {
         throw new Error("Failed to fetch standings")
