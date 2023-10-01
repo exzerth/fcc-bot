@@ -19,7 +19,7 @@ const Fixtures = () => {
     fetchStandings()
   }, [])
 
-  const matchup = fixtures && fixtures[0].matchups
+  const matchup = fixtures && fixtures[0] && fixtures[0].matchups
 
   /*
   reduce() method is used to iterate through the matchup array.

@@ -1,9 +1,9 @@
-import React from "react"
+import AdminMain from "@/components/Admin/AdminMain"
 
 const Admin = () => {
   return (
-    <div>
-      <h2>Admin Page</h2>
+    <div className="min-h-[100vh]">
+      <AdminMain />
     </div>
   )
 }

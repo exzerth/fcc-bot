@@ -23,6 +23,18 @@ const Register = () => {
     const user = new User(Number(fplId))
     const details: any = await user.getDetails()
 
+    // const teamData = {
+    //   FplId: details?.id,
+    //   ManagerName: `${details?.player_first_name} ${details?.player_last_name}`,
+    //   TeamName: details?.name,
+    //   Win: "",
+    //   Draw: "",
+    //   Lose: "",
+    //   Points: "",
+    //   TotalScore: "",
+    //   Played: "",
+    // }
+
     try {
       if (fplId === "") {
         toast.error("Field can't be empty")
@@ -31,12 +43,6 @@ const Register = () => {
           FplId: details?.id,
           ManagerName: `${details?.player_first_name} ${details?.player_last_name}`,
           TeamName: details?.name,
-          Win: "",
-          Draw: "",
-          Lose: "",
-          Points: "",
-          TotalScore: "",
-          Played: "",
         }
         await teamsStore.createTeam(teamData)
         setFplId("")

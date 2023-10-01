@@ -1,6 +1,6 @@
 "use client"
 
-import { Key, useContext, useEffect, useLayoutEffect, useState } from "react"
+import { Key, useContext, useEffect, useState } from "react"
 import { StoreContext } from "@/mobx-store/RootStore"
 import { Teams } from "@/types/teams"
 
@@ -9,7 +9,7 @@ const Teams = () => {
   const { loading } = teamsStore
   const [teams, setTeams] = useState<Teams[]>()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchTeams = async () => {
       await teamsStore.getTeams()
       const { teams } = teamsStore

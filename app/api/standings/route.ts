@@ -20,7 +20,7 @@ import { NextResponse } from "next/server"
 export async function GET() {
   try {
     const client = await clientPromise
-    const db = client.db("fpldata")
+    const db = client.db("fccdata")
 
     const groupedTeams = await db.collection("GroupedTeams").find({}).toArray()
 

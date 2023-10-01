@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 export async function POST(request: any) {
   try {
     const client = await clientPromise
-    const db = client.db("fpldata")
+    const db = client.db("fccdata")
 
     const teams = db.collection("Teams")
 
@@ -20,7 +20,8 @@ export async function POST(request: any) {
 export async function GET() {
   try {
     const client = await clientPromise
-    const db = client.db("fpldata")
+    //fpldata
+    const db = client.db("fccdata")
 
     const teams = await db.collection("Teams").find({}).toArray()
 
@@ -29,10 +30,3 @@ export async function GET() {
     console.error(error)
   }
 }
-
-// export async function DELETE(request) {
-//   const id = request.nextUrl.searchParams.get("id");
-//   await connectMongoDB();
-//   await Topic.findByIdAndDelete(id);
-//   return NextResponse.json({ message: "Topic deleted" }, { status: 200 });
-// }
